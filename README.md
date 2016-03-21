@@ -1,24 +1,41 @@
 # react-server-render
 ## 1 目录结构
 react-server-render
+
     -- app
+    
         -- home
+        
             -- actions
+            
             -- components
+            
             -- reducers
+            
             -- routers
+            
             -- constants
+            
     -- client
+    
         -- index.js
+        
     --server
+    
         -- index.js
+        
         -- server.js
+        
         -- api
+        
     --package.json
+    
     --webpack.config.js
+    
     --README.md
 
  ## 2 使用babel 6.x支持
+ 
  ### 2.1 Instancing packages
  ```
  npm install babel-loader --save-dev
@@ -33,6 +50,7 @@ react-server-render
  ```
 
  ### 2.2 Runtime support
+ 
  ```
  npm install babel-polyfill --save
  npm install babel-runtime --save
