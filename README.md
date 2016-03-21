@@ -37,6 +37,7 @@ react-server-render
  ## 2 使用babel 6.x支持
  
  ### 2.1 Instancing packages
+ 
  ```
  npm install babel-loader --save-dev
  //for es6 support
