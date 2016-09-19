@@ -36,6 +36,3 @@ export default class ItemContainer extends Component {
   }
 }
 
-ItemContainer.propTypes = {
-  item: PropTypes.object.isRequired
-}

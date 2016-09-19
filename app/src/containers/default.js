@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import echarts from 'echarts'
-import { loadDefaultChartData } from '../actions/items'
+import { loadDefaultChartData, loadTestData } from '../actions/items'
 import { Map } from 'immutable'
 
 const styles = {
@@ -17,12 +17,14 @@ const styles = {
 }
 
 function mapStateToProps(state) {
+  debugger
   return {
-    chartData: state.charts
+    chartData: state.charts,
+
   }
 }
 
-@connect(mapStateToProps, { loadDefaultChartData })
+@connect(mapStateToProps, { loadDefaultChartData, loadTestData })
 export default class Default extends Component {
   static fetchData({ store }) {
     return store.dispatch(loadDefaultChartData())
@@ -30,10 +32,13 @@ export default class Default extends Component {
 
   componentDidMount() {
     this.props.loadDefaultChartData()
+    this.props.loadTestData()
+    console.log(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.chartData !== nextProps) {
+    debugger
+    if(this.props.chartData !== nextProps.chartData) {
       const data = nextProps.chartData
       let charts = echarts.init(this.refs.charts)
       charts.setOption({
@@ -56,10 +61,18 @@ export default class Default extends Component {
   }
 
   render() {
+    let testData = this.props.chartData.get('test')
+    let state = testData.get('state')
+    let data = testData.get('data')
+    let message = testData.get('message')
+    console.log(state, data, message)
     return (
       <div className='intro'>
-        <h1 style={styles.h1}>示例项目</h1>
+        <h1 style={styles.h1}>示例项目1</h1>
         <div ref='charts' style={{width: 600, height: 400}}></div>
+        <div>
+            <h2>{message}</h2>
+        </div>
         <Link style={styles.a} to='/list'>Next Page(路由)</Link>
       </div>
     );

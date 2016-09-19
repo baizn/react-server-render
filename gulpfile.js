@@ -5,7 +5,7 @@ var pngquant = require('imagemin-pngquant')
 var cache = require('gulp-cache')
 
 gulp.task('img', function() {
-  gulp.src('app/assets/img/*.{png, jpg}')
+  gulp.src('app/public/img/*.{png, jpg}')
     .pipe(cache(imagemin({
       progressive: true,
       //不移除svg的viewbox属性
@@ -18,7 +18,7 @@ gulp.task('img', function() {
 })
 
 gulp.task('css', function() {
-  return gulp.src('app/assets/style/main.scss')
+  return gulp.src('app/public/style/main.scss')
            .pipe($.sourcemaps.init())
            .pipe($.sass().on('error', $.sass.logError))
            .pipe($.autoprefixer({
@@ -29,8 +29,8 @@ gulp.task('css', function() {
            .pipe(gulp.dest('./dist'));
 })
 
-gulp.task('css:watch', function() {
-  gulp.watch('app/assets/style/**/*.scss', ['img', 'css']);
+gulp.task('css:watch', ['css:build'], function() {
+  gulp.watch('app/public/style/**/*.scss', ['img', 'css']);
 });
 
 gulp.task('css:build', ['img', 'css'], function() {

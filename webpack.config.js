@@ -1,30 +1,16 @@
 var path = require('path')
 var webpack = require('webpack')
 var AssetsPlugin = require('assets-webpack-plugin')
-var CleanPlugin = require('clean-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var HappyPack = require('happypack')
+var happyThreadPool = HappyPack.ThreadPool({size: 10})
 
 var DEBUG = !(process.env.NODE_ENV === 'production')
-
-var env = {
-  NODE_ENV: process.env.NODE_ENV,
-  API_BASE_URL: process.env.API_BASE_URL
-}
-
+console.log('process.env.NODE_ENV=' + process.env.NODE_ENV)
 var config = {
   devtool: DEBUG ? 'cheap-module-eval-source-map' : false,
   entry: {
-    app: './app/client/index',
-    vendor: [
-      'react',
-      'react-router',
-      'redux',
-      'react-dom',
-      'lodash',
-      'bluebird',
-      'humps',
-      'history'
-    ]
+    app: './app/client/index'
   },
   resolve: {
     root: [ path.join(__dirname, 'app') ],
@@ -39,16 +25,22 @@ var config = {
       allChunks: false
     }),
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify(env)
-    })
+      'process.env': {
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      }
+    }),
   ],
   module: {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'happypack/loader',
+        //loader: 'babel',
         exclude: /node_modules/,
-        include: __dirname
+        include: __dirname,
+        query: {
+          cacheDirectory: true
+        }
       },
       {
         test: /\.css$/,
@@ -87,12 +79,36 @@ var config = {
 
 
 if (DEBUG) {
+  config.entry.vendor = [
+      'react',
+      'react-dom',
+      'redux',
+      'react-redux',
+      'react-router',
+      'immutable',
+      'echarts',
+      'bluebird',
+      'redux-thunk',
+      'lodash',
+      'redux-logger'
+  ]
+
   config.entry.dev = [
     'webpack-dev-server/client?http://localhost:3001',
     'webpack/hot/only-dev-server',
   ]
 
   config.plugins = config.plugins.concat([
+     new HappyPack({
+      loaders: [{
+        path: 'babel',
+        query: {
+          presets: ['react-hmre']
+        }
+      }],
+      cache: true,
+      threadPool: happyThreadPool
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -110,17 +126,27 @@ if (DEBUG) {
 } else {
   //config.output.publicPath = path.join(__dirname, 'dist')
   config.plugins = config.plugins.concat([
-    new CleanPlugin('dist'),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filname: '[name].[chunkhash].js'
+    new HappyPack({
+      loaders: ['babel'],
+      cache: true,
+      threadPool: happyThreadPool
     }),
-    new webpack.optimize.UglifyJsPlugin(),
-    new AssetsPlugin(
-      {
-        filename: 'assets.json'
-      }),
+    new webpack.optimize.UglifyJsPlugin({
+      'compress': {
+        warnings: false
+      }
+    }),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require("./dist/lib_manifest.json")
+    }),
+
+    new AssetsPlugin({ 
+      path: path.join(__dirname, 'dist'),
+      filename: 'assets.json'
+    }),
     new webpack.optimize.AggressiveMergingPlugin(),
+
     //将相似文件和chunk合并，以便更好地缓存
     new webpack.optimize.DedupePlugin(),
 

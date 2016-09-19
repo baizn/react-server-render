@@ -1,7 +1,7 @@
 {
     "apps": [
         {
-            "name": "template-react",
+            "name": "node-server",
             "script": "./app/server/index.js",
             "watch": false,
             "node_args": "--harmony",
@@ -14,12 +14,12 @@
             "env": {
                 "NODE_ENV": "development",
                 "NODE_PATH": "./app",
-                "PORT": 3001
+                "PORT": 3000
             },
             "env_production": {
                 "NODE_ENV": "production",
                 "NODE_PATH": "./app",
-                "PORT": 3001
+                "PORT": 3000
             }
         }
     ]   

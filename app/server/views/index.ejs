@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redux real-world example</title>
+    <link rel="stylesheet" href="<%= cssUrls %>" type="text/css" media="screen" charset="utf-8">
+  </head>
+  <body>
+    <div id="container"><%- html %></div>
+    <script type="text/javascript" charset="utf-8">
+      window.__INITIAL_STATE__ = '<%= initialState %>';
+    </script>
+
+    <% scriptsUrls.forEach(function(src){ %>
+      <script src="<%= src %>"></script>
+    <% }) %>
+
+  </body>
+</html>
+

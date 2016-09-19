@@ -38,7 +38,7 @@ export default class ListContainer extends Component {
   render() {
     return (
       <div>
-        <h2>Item</h2>
+        <h2>Item bzn</h2>
         <Items items={this.props.items} />
         <Link to="/">Back to Home</Link>
       </div>

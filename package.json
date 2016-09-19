@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "description": "海云数据前端项目",
   "scripts": {
-    "start": "cross-env NODE_PATH=./app concurrently --kill-others \"nodemon app/server\" \"node webpack.dev.js\" \"gulp css:watch\"",
-    "webpack": "cross-env NODE_ENV=production webpack --progress --color",
-    "build": "npm run webpack && gulp css:build"
+    "prebuild": "cross-env NODE_ENV=production webpack --config webpack.lib.js --progress --colors",
+    "start": "cross-env NODE_ENV=development NODE_PATH=./app concurrently --kill-others \"nodemon app/server\" \"node webpack.dev.js\" \"gulp css:watch\"",
+    "webpack": "cross-env NODE_ENV=production webpack --progress --colors",
+    "build": "cross-env NODE_ENV=production npm run webpack && gulp css:build"
   },
   "engines": {
     "node": "5.6.0",
@@ -22,6 +23,7 @@
     "bluebird": "^2.10.0",
     "compression": "^1.6.0",
     "echarts": "^3.2.3",
+    "ejs": "^2.3.4",
     "express": "^4.13.3",
     "gulp": "^3.9.1",
     "history": "^1.17.0",
@@ -59,6 +61,7 @@
     "concurrently": "^2.0.0",
     "cross-env": "^1.0.7",
     "css-loader": "^0.23.1",
+    "express-session": "^1.14.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-cache": "^0.4.5",
@@ -67,6 +70,7 @@
     "gulp-rev": "^7.1.2",
     "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.6.0",
+    "happypack": "^2.2.1",
     "imagemin-pngquant": "^5.0.0",
     "nock": "^2.17.0",
     "react-transform-catch-errors": "^1.0.0",

@@ -4,7 +4,6 @@ $text_color: #232323;
 
 body {
     color: $text_color;
-    background: url(../img/bg.png);
+    background: url(../img/bg.png) no-repeat;
+    background-size: cover; 
 }
-
-
